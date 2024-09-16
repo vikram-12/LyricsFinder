@@ -2,6 +2,7 @@
   "name": "lyric-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://lyrics-finder-chi.vercel.app/",
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "@testing-library/jest-dom": "^5.17.0",
