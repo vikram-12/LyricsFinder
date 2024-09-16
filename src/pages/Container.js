@@ -5,7 +5,7 @@ import Searchbar from "../components/Searchbar";
 
 const Container = () => {
   const { trackList } = useContext(LyricsContext);
-
+  console.log(trackList);
   return (
     <div>
       <Searchbar />
