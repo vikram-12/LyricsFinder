@@ -9,40 +9,53 @@ const LyricsProvider = ({ children }) => {
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const API_KEY = process.env.REACT_APP_API_KEY;
-      //   const url = "/api/ws/1.1/chart.tracks.get?";
-      // console.log(process.env.REACT_APP_API_KEY);
-      const trackResults = await axios
-        .get("/api/ws/1.1/chart.tracks.get", {
-          params: {
-            chart_name: "top",
-            page: 1,
-            page_size: 20,
-            country: "in",
-            f_has_lyrics: 1,
-            apikey: API_KEY,
-          },
-        })
-        .then((res) => res.data.message.body)
-        .catch((err) => console.log(err));
-      setTrackList(trackResults);
-    };
     fetchData();
   }, []);
+  const fetchData = async () => {
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const url = `https://genius-song-lyrics1.p.rapidapi.com/chart/songs`;
+    const options = {
+      method: "GET",
 
+      params: {
+        time_period: "day",
+        chart_genre: "all",
+        per_page: "20",
+        page: "1",
+      },
+      headers: {
+        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com",
+      },
+    };
+
+    const trackResults = await axios
+      .get(url, options)
+      .then((res) => res.data.chart_items)
+      .catch((err) => console.log(err));
+
+    setTrackList(trackResults);
+  };
   const fetchLyrics = async (track_id) => {
     const API_KEY = process.env.REACT_APP_API_KEY;
+    const url = "https://genius-song-lyrics1.p.rapidapi.com/song/lyrics";
+    const options = {
+      method: "GET",
+
+      params: {
+        id: track_id,
+        text_format: "plain",
+      },
+      headers: {
+        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com",
+      },
+    };
     setLoader(true);
     try {
       const lyricsData = await axios
-        .get("/api/ws/1.1/track.lyrics.get", {
-          params: {
-            commontrack_id: track_id,
-            apikey: API_KEY,
-          },
-        })
-        .then((res) => res.data.message.body.lyrics);
+        .get(url, options)
+        .then((res) => res.data.lyrics);
       setLyrics(lyricsData);
       // Assuming the API returns a single item array
       setLoader(false);
@@ -53,19 +66,23 @@ const LyricsProvider = ({ children }) => {
 
   const searchLyrics = async (searchValue) => {
     const API_KEY = process.env.REACT_APP_API_KEY;
+    const url = `https://genius-song-lyrics1.p.rapidapi.com/search`;
+    const options = {
+      method: "GET",
+
+      params: {
+        q: searchValue,
+        per_page: "20",
+        page: "1",
+      },
+      headers: {
+        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com",
+      },
+    };
     const trackResults = await axios
-      .get("/api/ws/1.1/track.search", {
-        params: {
-          q: searchValue,
-          page: 1,
-          page_size: 20,
-          s_track_rating: "desc",
-          country: "in",
-          f_has_lyrics: 1,
-          apikey: API_KEY,
-        },
-      })
-      .then((res) => res.data.message.body)
+      .get(url, options)
+      .then((res) => res.data.hits)
       .catch((err) => console.log(err));
     setTrackList(trackResults);
   };

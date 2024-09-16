@@ -5,7 +5,7 @@ import Searchbar from "../components/Searchbar";
 
 const Container = () => {
   const { trackList } = useContext(LyricsContext);
-  console.log(trackList);
+  console.log("here", trackList);
   return (
     <div>
       <Searchbar />
@@ -13,8 +13,11 @@ const Container = () => {
         <p> Loading ...</p>
       ) : (
         <div className="sm:grid xl:grid-cols-3 md:grid-cols-2 p-4">
-          {trackList?.track_list.map((tracks) => (
-            <Track key={tracks.track.track_id} tracks={tracks} />
+          {trackList?.map((tracks) => (
+            <Track
+              key={tracks?.item?.id || tracks?.result?.id}
+              tracks={tracks}
+            />
           ))}
         </div>
       )}
