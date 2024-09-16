@@ -13,7 +13,7 @@ const Container = () => {
         <p> Loading ...</p>
       ) : (
         <div className="sm:grid xl:grid-cols-3 md:grid-cols-2 p-4">
-          {trackList.track_list.map((tracks) => (
+          {trackList?.track_list.map((tracks) => (
             <Track key={tracks.track.track_id} tracks={tracks} />
           ))}
         </div>
